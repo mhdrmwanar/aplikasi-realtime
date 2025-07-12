@@ -16,16 +16,17 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f6fa;
-            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e2e8f0;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00d4ff 0%, #5b86e5 100%);
             color: white;
             padding: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0, 212, 255, 0.3);
         }
 
         .header-content {
@@ -95,12 +96,13 @@
         }
 
         .stat-card {
-            background: white;
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             text-align: center;
             transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .stat-card:hover {
@@ -115,12 +117,13 @@
         .stat-card .value {
             font-size: 2.5em;
             font-weight: bold;
-            color: #667eea;
+            color: #00d4ff;
             margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
         }
 
         .stat-card .label {
-            color: #666;
+            color: #a0aec0;
             font-size: 1.1em;
         }
 
@@ -132,15 +135,16 @@
         }
 
         .chart-container {
-            background: white;
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .chart-container h3 {
             margin-bottom: 20px;
-            color: #333;
+            color: #e2e8f0;
             font-size: 1.3em;
             text-align: center;
         }
@@ -150,16 +154,17 @@
         }
 
         .wordcloud-section {
-            background: white;
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .wordcloud-section h3 {
             margin-bottom: 20px;
-            color: #333;
+            color: #e2e8f0;
             font-size: 1.3em;
             text-align: center;
         }
@@ -167,33 +172,37 @@
         #wordCloudCanvas {
             width: 100%;
             height: 300px;
-            border: 1px solid #eee;
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 10px;
+            background: rgba(26, 32, 44, 0.5);
         }
 
         .responses-section {
-            background: white;
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .responses-section h3 {
             margin-bottom: 20px;
-            color: #333;
+            color: #e2e8f0;
             font-size: 1.3em;
         }
 
         .response-item {
-            border: 1px solid #eee;
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 15px;
             transition: all 0.3s ease;
+            background: rgba(26, 32, 44, 0.3);
         }
 
         .response-item:hover {
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 15px rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.3);
         }
 
         .response-header {
@@ -222,15 +231,17 @@
 
         .response-meta {
             font-size: 0.9em;
-            color: #666;
+            color: #a0aec0;
         }
 
         .response-comment {
             margin-top: 10px;
             padding: 10px;
-            background: #f8f9fa;
+            background: rgba(26, 32, 44, 0.6);
             border-radius: 8px;
             font-style: italic;
+            color: #cbd5e0;
+            border-left: 3px solid #00d4ff;
         }
 
         .sentiment-badge {
@@ -242,23 +253,26 @@
         }
 
         .sentiment-positive {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(45, 90, 39, 0.8);
+            color: #68d391;
+            border: 1px solid #38a169;
         }
 
         .sentiment-negative {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(116, 42, 42, 0.8);
+            color: #fc8181;
+            border: 1px solid #e53e3e;
         }
 
         .sentiment-neutral {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(133, 100, 4, 0.8);
+            color: #f6e05e;
+            border: 1px solid #d69e2e;
         }
 
         .no-data {
             text-align: center;
-            color: #666;
+            color: #a0aec0;
             font-style: italic;
             padding: 40px;
         }
@@ -272,8 +286,8 @@
             content: '';
             width: 40px;
             height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #00d4ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: inline-block;
@@ -518,7 +532,7 @@
             if (Object.keys(wordCloudData).length === 0) {
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#999';
+                ctx.fillStyle = '#a0aec0';
                 ctx.font = '16px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText('Belum ada data untuk word cloud', canvas.width/2, canvas.height/2);
@@ -542,7 +556,7 @@
                 weightFactor: 3,
                 fontFamily: 'Arial, sans-serif',
                 color: function() {
-                    const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
+                    const colors = ['#00d4ff', '#5b86e5', '#68d391', '#f6e05e', '#fc8181', '#fbb6ce'];
                     return colors[Math.floor(Math.random() * colors.length)];
                 },
                 rotateRatio: 0.3,

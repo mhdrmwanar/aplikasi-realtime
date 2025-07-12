@@ -5,14 +5,16 @@ Aplikasi survey feedback realtime yang memungkinkan peserta mengirim feedback da
 ## ✨ Fitur Utama
 
 ### 🎯 Untuk Peserta Survey
+
 - **Submit Feedback Realtime**: Rating 1-5 bintang dengan komentar opsional
 - **Mode Anonymous**: Opsi untuk mengirim feedback secara anonim
 - **Statistik Live**: Melihat statistik agregat secara realtime
 - **UI Responsif**: Desain modern dan mobile-friendly
 
 ### 📈 Untuk Admin
+
 - **Dashboard Realtime**: Monitoring semua feedback masuk secara live
-- **Visualisasi Data**: 
+- **Visualisasi Data**:
   - Chart distribusi rating
   - Analisis sentimen (positif, netral, negatif)
   - Word cloud dari kata kunci populer
@@ -22,10 +24,12 @@ Aplikasi survey feedback realtime yang memungkinkan peserta mengirim feedback da
 ## 🚀 Cara Menjalankan
 
 ### Prerequisites
+
 - Node.js (v14 atau lebih baru)
 - NPM
 
 ### Instalasi dan Menjalankan
+
 ```bash
 # Clone atau download project ini
 # Masuk ke direktori project
@@ -41,6 +45,7 @@ npm run dev
 ```
 
 Server akan berjalan di:
+
 - **Form Feedback**: http://localhost:3001
 - **Dashboard Admin**: http://localhost:3001/admin
 
@@ -62,11 +67,13 @@ aplikasi-realtime/
 ## 🔧 Teknologi yang Digunakan
 
 ### Backend
+
 - **Node.js & Express.js**: Server dan API
 - **Socket.IO**: Komunikasi realtime bidirectional
 - **CORS**: Cross-Origin Resource Sharing
 
-### Frontend  
+### Frontend
+
 - **HTML/CSS/JavaScript**: UI vanilla modern
 - **Chart.js**: Visualisasi chart dan grafik
 - **WordCloud2.js**: Generasi word cloud
@@ -75,6 +82,7 @@ aplikasi-realtime/
 ## 📱 Fitur Detail
 
 ### Form Feedback (index.html)
+
 - Rating system dengan bintang interaktif
 - Textarea untuk komentar dengan counter karakter
 - Checkbox untuk mode anonymous
@@ -82,6 +90,7 @@ aplikasi-realtime/
 - Statistik live di bagian bawah
 
 ### Dashboard Admin (admin.html)
+
 - **Statistik Overview**: Total feedback, rating rata-rata, persentase positif
 - **Chart Distribusi Rating**: Bar chart untuk setiap rating 1-5
 - **Chart Sentimen**: Doughnut chart analisis sentimen
@@ -90,7 +99,9 @@ aplikasi-realtime/
 - **Reset Data**: Tombol untuk menghapus semua data
 
 ### Analisis Sentiment
+
 Sistem melakukan analisis sentiment sederhana berdasarkan:
+
 - **Kata Positif**: bagus, baik, hebat, excellent, good, great, dll
 - **Kata Negatif**: buruk, jelek, bad, terrible, awful, dll
 - **Default**: neutral jika tidak ada kata kunci yang terdeteksi
@@ -98,6 +109,7 @@ Sistem melakukan analisis sentiment sederhana berdasarkan:
 ## 🔄 Real-time Events
 
 ### Socket.IO Events
+
 - `submitFeedback`: Kirim feedback baru
 - `feedbackUpdate`: Broadcast data terbaru ke semua client
 - `feedbackSubmitted`: Konfirmasi feedback berhasil dikirim
@@ -114,9 +126,10 @@ Sistem melakukan analisis sentiment sederhana berdasarkan:
 
 ## 📊 Data Storage
 
-Saat ini menggunakan **in-memory storage** untuk demo. Data akan hilang ketika server di-restart. 
+Saat ini menggunakan **in-memory storage** untuk demo. Data akan hilang ketika server di-restart.
 
 Untuk production, dapat diintegrasikan dengan database seperti:
+
 - MongoDB
 - PostgreSQL
 - MySQL
@@ -125,11 +138,13 @@ Untuk production, dapat diintegrasikan dengan database seperti:
 ## 🚀 Deployment
 
 ### Local Development
+
 ```bash
 npm run dev
 ```
 
 ### Production Ready
+
 1. Set environment variables untuk PORT
 2. Implementasi database persistent
 3. Add authentication untuk admin dashboard
