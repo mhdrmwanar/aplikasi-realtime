@@ -209,7 +209,15 @@
         }
 
         .response-rating .star {
-            color: #ffd700;
+            color: #ffdd00;
+            text-shadow: 0 0 8px rgba(255, 221, 0, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .response-rating .star.empty {
+            color: #ddd;
+            text-shadow: none;
+            filter: none;
         }
 
         .response-meta {
@@ -555,7 +563,9 @@
             const sortedResponses = responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             
             responsesList.innerHTML = sortedResponses.map(response => {
-                const stars = '⭐'.repeat(response.rating) + '☆'.repeat(5 - response.rating);
+                const filledStars = '⭐'.repeat(response.rating);
+                const emptyStars = '☆'.repeat(5 - response.rating);
+                const stars = `<span class="star">${filledStars}</span><span class="star empty">${emptyStars}</span>`;
                 const timestamp = new Date(response.timestamp).toLocaleString('id-ID');
                 const sentimentClass = `sentiment-${response.sentiment}`;
                 
