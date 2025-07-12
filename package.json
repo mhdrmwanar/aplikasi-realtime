@@ -1,0 +1,26 @@
+{
+  "name": "aplikasi-realtime",
+  "version": "1.0.0",
+  "description": "Aplikasi feedback live survey dengan visualisasi realtime",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "realtime",
+    "feedback",
+    "survey", 
+    "socket.io",
+    "express",
+    "visualization"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Feedback Live</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .rating-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .star {
+            font-size: 2.5em;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        .star:hover ~ .star {
+            color: #ddd;
+        }
+
+        .rating-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1em;
+            color: #666;
+            min-height: 25px;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .checkbox-container label {
+            color: #666;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .stats-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .stats-numbers {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-item .label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .admin-link {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .star {
+                font-size: 2em;
+            }
+            
+            .stats-numbers {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/admin" class="admin-link">📊 Dashboard Admin</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Survey Feedback</h1>
+            <p>Berikan feedback Anda dan lihat hasilnya secara realtime!</p>
+        </div>
+
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label>Berikan rating Anda (1-5 bintang):</label>
+                <div class="rating-container">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="ratingText">Pilih rating Anda</div>
+            </div>
+
+            <div class="form-group">
+                <label for="comment">Komentar (opsional):</label>
+                <textarea 
+                    id="comment" 
+                    name="comment" 
+                    placeholder="Tuliskan feedback, saran, atau komentar Anda di sini..."
+                    maxlength="500"
+                ></textarea>
+            </div>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="anonymous" name="anonymous" checked>
+                <label for="anonymous">Kirim sebagai anonymous</label>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Kirim Feedback
+            </button>
+        </form>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <div class="stats-info">
+            <h3>📈 Statistik Live</h3>
+            <div class="stats-numbers">
+                <div class="stat-item">
+                    <div class="number" id="totalResponses">0</div>
+                    <div class="label">Total Feedback</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="averageRating">0.0</div>
+                    <div class="label">Rating Rata-rata</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="positiveCount">0</div>
+                    <div class="label">Feedback Positif</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+        let selectedRating = 0;
+
+        // Rating stars functionality
+        const stars = document.querySelectorAll('.star');
+        const ratingText = document.getElementById('ratingText');
+        const ratingTexts = {
+            1: '😞 Sangat Tidak Puas',
+            2: '😕 Tidak Puas', 
+            3: '😐 Cukup',
+            4: '😊 Puas',
+            5: '😍 Sangat Puas'
+        };
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                updateStars();
+                ratingText.textContent = ratingTexts[selectedRating];
+            });
+
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = parseInt(this.dataset.rating);
+                highlightStars(hoverRating);
+                ratingText.textContent = ratingTexts[hoverRating];
+            });
+        });
+
+        document.querySelector('.rating-container').addEventListener('mouseleave', function() {
+            updateStars();
+            ratingText.textContent = selectedRating ? ratingTexts[selectedRating] : 'Pilih rating Anda';
+        });
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (selectedRating === 0) {
+                showMessage('Silakan pilih rating terlebih dahulu!', 'error');
+                return;
+            }
+
+            const formData = {
+                rating: selectedRating,
+                comment: document.getElementById('comment').value.trim(),
+                anonymous: document.getElementById('anonymous').checked
+            };
+
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Mengirim...';
+
+            // Send feedback via socket
+            socket.emit('submitFeedback', formData);
+        });
+
+        // Socket event listeners
+        socket.on('feedbackSubmitted', function(response) {
+            if (response.success) {
+                showMessage('✅ Feedback berhasil dikirim! Terima kasih atas partisipasi Anda.', 'success');
+                resetForm();
+            }
+        });
+
+        socket.on('feedbackUpdate', function(data) {
+            updateStatistics(data.statistics);
+        });
+
+        socket.on('error', function(message) {
+            showMessage('❌ ' + message, 'error');
+            resetSubmitButton();
+        });
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+
+        function showMessage(text, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = text;
+            statusMessage.className = `status-message ${type}`;
+            statusMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function resetForm() {
+            selectedRating = 0;
+            updateStars();
+            document.getElementById('comment').value = '';
+            document.getElementById('anonymous').checked = true;
+            ratingText.textContent = 'Pilih rating Anda';
+            resetSubmitButton();
+        }
+
+        function resetSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Kirim Feedback';
+        }
+
+        function updateStatistics(stats) {
+            document.getElementById('totalResponses').textContent = stats.total;
+            
+            // Calculate average rating
+            let totalRating = 0;
+            let totalVotes = 0;
+            for (let rating in stats.ratings) {
+                totalRating += parseInt(rating) * stats.ratings[rating];
+                totalVotes += stats.ratings[rating];
+            }
+            const averageRating = totalVotes > 0 ? (totalRating / totalVotes).toFixed(1) : '0.0';
+            document.getElementById('averageRating').textContent = averageRating;
+            
+            document.getElementById('positiveCount').textContent = stats.sentiments.positive;
+        }
+
+        // Character counter for textarea
+        const textarea = document.getElementById('comment');
+        textarea.addEventListener('input', function() {
+            const remaining = 500 - this.value.length;
+            if (remaining < 50) {
+                this.style.borderColor = remaining < 0 ? '#dc3545' : '#ffc107';
+            } else {
+                this.style.borderColor = '#e0e0e0';
+            }
+        });
+    </script>
+</body>
+</html>
